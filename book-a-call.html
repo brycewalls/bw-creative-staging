@@ -277,5 +277,31 @@ if(matchMedia('(hover:hover) and (pointer:fine)').matches){
 })();
 </script>
 <style>@media(max-width:480px){#ccBanner{left:14px!important;right:14px!important;bottom:14px!important;max-width:none!important}}</style>
+
+<script>
+(function () {
+  let metaLeadSent = false;
+
+  window.addEventListener("message", function (e) {
+    if (
+      metaLeadSent ||
+      !e ||
+      !e.data ||
+      e.data.event !== "calendly.event_scheduled"
+    ) {
+      return;
+    }
+
+    if (typeof window.fbq === "function") {
+      window.fbq("track", "Lead");
+      metaLeadSent = true;
+      console.log("[Meta Pixel] Calendly booking completed. Lead event sent.");
+    } else {
+      console.warn("[Meta Pixel] fbq is not available.");
+    }
+  });
+})();
+</script>
+
 </body>
 </html>
